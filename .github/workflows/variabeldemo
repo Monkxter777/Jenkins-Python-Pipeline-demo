@@ -1,0 +1,36 @@
+name: workflow for varialbles
+on: push 
+env: 
+  pyhton_version: '3,13'
+
+jobs:
+    job_python:
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Checkout the code on runner
+              uses: actions/checkout@v7
+            - name: set up python
+              uses: actions/setup-python@v7
+              with:
+                    python-version: ${{env.pyhton_version}}
+            - name: print the python version
+              run: python --version
+    job_python2:
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Checkout the code on runner
+              uses: actions/checkout@v7
+            - name: set up python
+              uses: actions/setup-python@v7
+              with:
+                    python-version: ${{env.pyhton_version}}
+            - name: install dependencies
+              run: |
+                  pip install --upgrade pip
+                  pip install -r requirements.txt
+            - name: set the python path
+              run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+            - name: run tests
+              run: |
+                  pytest tests --cov=app --cov-report=xml
+
